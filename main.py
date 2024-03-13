@@ -3,12 +3,21 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from models import calendar
 from database import SessionLocal, engine
+from fastapi.middleware.cors import CORSMiddleware
+
 
 app = FastAPI()
 
 calendar.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["*"],
+)
 
 
 def get_db():
@@ -150,3 +159,6 @@ def store_check_time(time_req: TimeRequest):
 @app.get("/")
 async def read_root():
     return "Multi-calendar management app"
+
+
+
