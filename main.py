@@ -2,34 +2,25 @@
 import logging
 
 from fastapi import FastAPI, HTTPException, Depends
-from databases import Database
+from database import SessionLocal, engine
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Boolean
 from sqlalchemy.sql import select
 from pydantic import BaseModel
+from models import calendar
 
 app = FastAPI()
 
-# Database connection setup
-DATABASE_URL = "mysql://root:@localhost/calender"
-database = Database(DATABASE_URL)
-metadata = MetaData()
+calendar.Base.metadata.create_all(bind=engine)
 
-# Define the calendars table
-calendars = Table(
-    "calendars",
-    metadata,
-    Column("id", Integer, primary_key=True, autoincrement=True),
-    Column("name", String(100)),
-    Column("calendar_type", String(100)),
-    Column("api_key", String(100)),
-    Column("show_busy_only", Boolean, default=False),
-    Column("is_private", Boolean, default=False),
-)
+app = FastAPI()
 
-engine = create_engine(DATABASE_URL)
-metadata.create_all(engine)
 
-# Pydantic model for calendar
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 
 class CalendarCreate(BaseModel):
