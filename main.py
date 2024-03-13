@@ -150,3 +150,9 @@ def store_check_time(time_req: TimeRequest):
             return {"message": "Time inserted successfully"}
     except ValueError:
         raise HTTPException(status_code=400, detail="Invalid datetime format")
+
+
+
+@app.get("/")
+async def read_root():
+    return "Multi-calendar management app"
