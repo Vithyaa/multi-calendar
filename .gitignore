@@ -1,0 +1,16 @@
+# Virtual environment
+venv/
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+# Editor-specific files
+.vscode/
+.idea/
+# Environment variable files
+.env
+# Compiled Python files
+*.pyc
+# OS or editor temporary files
+.DS_Store
+Thumbs.db
